@@ -36,6 +36,41 @@ def extract_text() :
 	fin.close();
 	fout.close();
 
+def extract_id_feige() :
+	with open(DATA_DIR+'','w') as fp:
+		haha = LineLogger(interval=10000)
+		for line in file(DATA_DIR + '/trainPosts.json'):
+		    row = json.loads(line)
+		    url = row['url']
+		    langu = row['language']
+		    content = row['content']
+		    if content:
+		        try:
+		            text = strip_tags(content).encode('ascii','ignore').replace('\n',' ').replace('\r',' ')
+		        except:
+		            text = ''
+		    else:
+		        text = ''
+		    print >> fp, ' '.join([url,langu,text])
+		    haha.inc()
+		haha.end()
+		
+		haha = LineLogger(interval=10000)
+		for line in file(DATA_DIR + '/testPosts.json'):
+		    row = json.loads(line)
+		    url = row['url']
+		    langu = row['language']
+		    content = row['content']
+		    if content:
+		        try:
+		            text = strip_tags(content).encode('ascii','ignore').replace('\n',' ').replace('\r',' ')
+		        except:
+		            text = ''
+		    else:
+		        text = ''
+		    print >> fp, ' '.join([url,langu,text])
+		    haha.inc()
+
 def extract_text_feige() :
 	with open('posts.mallet.input2','w') as fp:
 		haha = LineLogger(interval=10000)

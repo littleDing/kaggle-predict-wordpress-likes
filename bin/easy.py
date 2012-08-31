@@ -166,23 +166,27 @@ def prepare_svm():
 	logging.info("fav blogs ready")
 	pickle.dump(test_posts,open(TMP_DIR+"/svm/fav_blogs.pydump",'w'))
 					
-def do_svm() :
+def prepare_svm_input() :
 	posts = {}
 	with open(TMP_DIR+"/svm/posts.pydump") as fin :
-		posts = pickle.load(fin)
-	
+		#posts = pickle.load(fin)
+		pass
+	logging.info("posts ready")
 	
 	test_posts = {}
 	with open(TMP_DIR+"/svm/test_posts.pydump") as fin :
 		test_posts = pickle.load(fin)
+	logging.info("test posts ready")
 	
 	blogs = {}
 	with open(TMP_DIR+"/svm/blogs.pydump") as fin :
 		test_posts = pickle.load(fin)
+	logging.info("blogs ready")
 	
 	fav_blogs = {}
 	with open(TMP_DIR+"/svm/fav_blogs.pydump") as fin :
 		fav_blogs = pickle.load(fin)
+	logging.info("fav blogs ready")
 
 	with open(DATA_DIR + 'trainUsers.json') as fin :
 		haha = LineLogger(interval=1000,name='prepare svm data')
@@ -195,11 +199,14 @@ def do_svm() :
 					like_posts.append(int(post['post_id']))
 				train_posts = []
 				for blog in fav_blogs[uid] :
-					train_posts += blog
+					if blog in blogs :	
+						train_posts += blogs[blog]
 				with open(TMP_DIR + 'svm_input.'+str(uid),"w") as fout :
+					logging.info('train_posts= '+str(train_posts))
 					for post in train_posts :
 						like = post in like_posts
-						writeToFile(posts[post],like,fout)
+						#writeToFile(posts[post],like,fout)
+				break
 			haha.inc()
 		haha.end()
 				
@@ -208,8 +215,8 @@ def main() :
 #	find_favourite()
 #	rec_post()
 #	stat_blog()
-	prepare_svm()
-#	do_svm()
+#	prepare_svm()
+	prepare_svm_input()
 
 if __name__ == '__main__' :
 	main()

@@ -16,7 +16,7 @@ def strip_tags(html):
 	return s.get_data()
 
 class LineLogger():
-	def __init__(self,name="",interval=1000,msg="lines loaded"):
+	def __init__(self,name="",interval=10000,msg="lines loaded"):
 		self.cnt =0
 		self.interval = interval
 		self.msg = msg
@@ -27,6 +27,6 @@ class LineLogger():
 	def inc(self):
 		self.cnt += 1
 		if self.cnt % self.interval == 0 :
-			logging.info(str(self.cnt) + " " + self.msg)
+			logging.info(self.name+' '+str(self.cnt) + " " + self.msg)
 
 
