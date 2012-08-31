@@ -14,7 +14,7 @@ def printPost(post,like) :
 	keys = post.keys()
 	keys.sort()	
 	for key in keys :
-		ret += ' '+str(key) + '  ' + post[key] + ' '
+		ret += ' '+str(key) + '  ' + str(post[key]) + ' '
 	return ret
 
 def prepare_svm_input() :
@@ -35,6 +35,8 @@ def prepare_svm_input() :
 			pickle.dump(fav_blogs,open(dump_path,'w'))
 	haha.end()
 	
+	blog_posts_test = load_blog_posts_test()
+	blog_posts_train = load_blog_posts_train()	
 	posts = load_pid_lda()
 
 	with open(DATA_DIR + 'trainUsers.json') as fin :
@@ -55,12 +57,15 @@ def prepare_svm_input() :
 				for blog in user['likes'] :
 					pid = int(blog['post_id'])
 					like_posts.append(pid)
+#				logging.info('train_post = '+ str(train_posts) + '\n\n'+'test_post = ' + str(test_posts) );
 				with open(TMP_DIR+'/svm_input/svm_input_train.'+str(uid),'w') as fout :
 					for pid in train_posts :
-						fout.write(printPost(posts[pid],pid in like_posts)+'\n')	
+						if pid in posts :
+							fout.write(printPost(posts[pid],pid in like_posts)+'\n')	
 				with open(TMP_DIR+'/svm_input/svm_input_test.' +str(uid),'w') as fout :
 					for pid in test_posts :
-						fout.write(printPost(posts[pid],False)+'\n')	
+						if pid in posts :
+							fout.write(printPost(posts[pid],False)+'\n')	
 			haha.inc()
 		haha.end()
 
