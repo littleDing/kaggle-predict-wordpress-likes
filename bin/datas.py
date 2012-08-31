@@ -58,8 +58,11 @@ def load_blog_posts(filename,dumpname) :
 	bp = BlogPosts(filename,dumpname)
 	blog_posts = bp.load_data()
 	return blog_posts
+
+## Output: {blog_id:[post_id in train]}
 def load_blog_posts_train() :
 	return load_blog_posts('trainPostsThin.json','blog_posts_train.pydump')
+## Output: {blog_id:[post_id in test]}
 def load_blog_posts_test() :
 	return load_blog_posts('testPostsThin.json','blog_posts_test.pydump')
 
@@ -77,7 +80,7 @@ class UrlPid(DataLoader):
 			self.data[url]=pid
 		except : 
 			pass
-
+## Output:{ url:post_id }
 def load_url_pid() :
 	UP = UrlPid()
 	return UP.load_data()
@@ -98,45 +101,35 @@ class PidLda(DataLoader):
 			for i in range(2,len(sp),2) :
 				key = int(sp[i])
 				value = float(sp[i+1])
-				self.posts[pid][key] = value	
+				self.data[pid][key] = value	
 
-
+## Output: { post_id:{ topic_index:weight } }
 def load_pid_lda() :
 	return PidLda().load_data()
 
-def tmp_func() :		
-	dump_path = DUMP_PATH_BASE + '/pid_lda.pydump'
-	posts = {}
-	try :
-		fin = open(dump_path)
-		posts = pickle.load(fin)
-	except: 
-		logging.debug('\n'+traceback.format_exc())
-		url_pid = load_url_pid()	
-		with open(DATA_DIR + 'post_text.doc_topics') as fin :
-			fin.readline()
-			haha = LineLogger(name="pid_lda")
-			for line in fin :
-				sp = line.split()
-				url = sp[1]
-				if url in url_pid :
-					pid = url_pid[url]
-					posts[pid]={}
-					for i in range(2,len(sp),2) :
-						key = int(sp[i])
-						value = float(sp[i+1])
-						posts[pid][key]=value		
-				haha.inc()
-			haha.end()
-		with open(dump_path,'w') as fout:
-			pickle.dump(posts,fout)
-	return posts
+class FavBlogs(DataLoader):
+	def __init__(self) :
+		DataLoader.__init__(self)
+		self.dump_path = DUMP_PATH_BASE + '/fav_blogs.pydump'
+		self.filename = DATA_DIR + 'kaggle-stats-users-20111123-20120423.json'
+		self.data = {}
+	def deal_line(self,line) :
+		user = json.loads(line)
+		uid = int(user['user_id'])
+		self.data[uid] = []
+		for blog in user['like_blog_dist'] :
+			self.data[uid] += [int(blog['blog_id'])]
 
+## Output : { user_id : [blog_id] }
+def load_fav_blogs() :
+	return FavBlogs().load_data()
+		
 def main() :
-	load_pid_lda()
+#	load_pid_lda()
 #	load_blog_posts_train()
 #	load_blog_posts_test()	
 #	load_url_pid()
+	pass
 
 if __name__ == '__main__' :
 	main()

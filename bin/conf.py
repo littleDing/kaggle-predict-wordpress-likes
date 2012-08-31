@@ -1,4 +1,4 @@
-ROOT_DIR = "/home/dingweijie/Desktop/kaggle/wordpress/" 
+ROOT_DIR = "../" 
 DATA_DIR = ROOT_DIR + "/data/"
 BIN_DIR = ROOT_DIR + "/bin/"
 TMP_DIR = ROOT_DIR + "/tmp/"
