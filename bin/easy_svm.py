@@ -3,6 +3,11 @@ from conf import *
 from tools import *
 import json
 import pickle
+from sklearn import svm
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn import linear_model
+from datas import *
+
 logging.basicConfig(level=logging.NOTSET,format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',datefmt='%a, %d %b %Y %H:%M:%S')
 WORD_BASE = 10007
 
@@ -135,9 +140,8 @@ def prepare_svm_input() :
 			haha.inc()
 		haha.end()
 
-
 def main():
-	prepare_svm_input()
+	very_easy()
 
 if __name__ == '__main__' :
 	main()

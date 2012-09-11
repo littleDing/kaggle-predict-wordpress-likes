@@ -37,12 +37,13 @@ def extract_text() :
 	fout.close();
 
 def extract_id_feige() :
-	with open(DATA_DIR+'','w') as fp:
+	with open(DATA_DIR+'pid_language_context','w') as fp:
 		haha = LineLogger(interval=10000)
 		for line in file(DATA_DIR + '/trainPosts.json'):
 		    row = json.loads(line)
 		    url = row['url']
 		    langu = row['language']
+		    pid = row['post_id']
 		    content = row['content']
 		    if content:
 		        try:
@@ -51,14 +52,14 @@ def extract_id_feige() :
 		            text = ''
 		    else:
 		        text = ''
-		    print >> fp, ' '.join([url,langu,text])
+		    print >> fp, ' '.join([pid,langu,text])
 		    haha.inc()
 		haha.end()
 		
 		haha = LineLogger(interval=10000)
 		for line in file(DATA_DIR + '/testPosts.json'):
 		    row = json.loads(line)
-		    url = row['url']
+		    pid = row['post_id']
 		    langu = row['language']
 		    content = row['content']
 		    if content:
@@ -119,7 +120,7 @@ def make_LDA_for_file(filename) :
 
 def main() :
 #	extract_text()
-	extract_text_feige()
+	extract_id_feige()
 	
 
 if __name__ == '__main__' :
